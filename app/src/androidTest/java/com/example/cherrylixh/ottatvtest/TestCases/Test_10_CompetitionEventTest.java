@@ -116,6 +116,7 @@ public class Test_10_CompetitionEventTest extends BaseCase {
         //按菜单键，随机选择一个赛季和赛制，选择随机选择一个轮次的数据是否正确
         mDevice.pressKeyCode(82);
         sleep(3000);
+        sleep(300);
         Integer[] indexs=pm.getCompetitionEventPage().getIndexs();
         Log.i("indexs", String.valueOf(indexs[0]));
         Log.i("indexs", String.valueOf(indexs[1]));
@@ -181,9 +182,9 @@ public class Test_10_CompetitionEventTest extends BaseCase {
                 assertEquals(sportId + "赛事数量与实际不一致", exceptLastData, focusLastData);
             } catch (AssertionError e3) {
                 commentation.takeScreenShot(sportId + methodName);
+                sleep(300);
                 eventIsOk = false;
                 errorId++;
-
             }
         }
         assertEquals("赛事赛程数据不正确,错误数" + errorId, true, eventIsOk);

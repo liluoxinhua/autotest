@@ -30,8 +30,7 @@ public class Test_03_Demo extends BaseCase {
         boolean isnew = false;
         String sportid = "210329";
         //中超
-        sleep(5000);
-
+        sleep(1000);
         new Test_10_CompetitionEventTest().Test_competitionEventTest_02(isnew,sportid);
 
     }
