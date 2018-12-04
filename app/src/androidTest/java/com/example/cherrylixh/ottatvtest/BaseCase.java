@@ -21,6 +21,8 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.IOException;
 
+import static com.example.cherrylixh.ottatvtest.Commentation.cmdExec;
+
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 public class BaseCase {
@@ -40,7 +42,7 @@ public class BaseCase {
     @BeforeClass
     public static void setup(){
         //测试项目开始前运行，如启动app
-        packageName="com.pptv.tvsports";
+        packageName="com.pptv.tvsports.dev";
         version="3.4.0";
         //开始抓取日志
         Logcats.getLog(false);
@@ -74,10 +76,12 @@ public class BaseCase {
        // logcatHelper.stop();
         Logcats.getLog(true);
 
-     new AnlysysXml().xmlToExcel();
+     new AnlysysXml().xmlToHtml();
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+        String filename =path+ "OttAtv" + File.separator + "testResult.html";
+        Log.i("filename:",filename);
+     cmdExec("adb pull "+filename+" D:\\git\\OTTAtvTest");
     }
-//   @Rule
- // public ExtentUtils  eu=new ExtentUtils(extent);
     public static void startApp(UiDevice mDevice, Context context,String packageName) {
         if(mDevice!=null){
             Log.i("startAPP","get Device sucessfully!");

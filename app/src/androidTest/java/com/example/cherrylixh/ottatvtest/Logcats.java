@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -21,8 +20,8 @@ public class Logcats extends BaseCase{
             path=context.getFilesDir().getAbsolutePath();
         }
         Date dc=new Date();
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd-HH_mm_ss");
-        path=path+File.separator+logdir+File.separator+format.format(dc)+ File.separator;
+       // SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd-HH_mm_ss");
+        path=path+File.separator+logdir+File.separator;
         File file=new File(path);
         if(!file.exists()){
             file.mkdirs();

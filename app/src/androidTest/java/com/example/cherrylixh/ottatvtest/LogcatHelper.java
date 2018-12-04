@@ -11,10 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-
-import de.mindpipe.android.logging.log4j.LogConfigurator;
 
 public class LogcatHelper {
     private static LogcatHelper INSTANCE = null;
@@ -30,8 +27,8 @@ public class LogcatHelper {
      * */
     public void init(Context context) {
         Date dc=new Date();
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd-HH_mm_ss");
-        String fileName="OttAtv"+File.separator+format.format(dc);
+      //  SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd-HH_mm_ss");
+        String fileName="OttAtv"+File.separator;
         /*Environment类可以获取外部存储目录，getExternalStorageState()方法返回外部存储设备的当前状态
          getExternalStorageDirectory（）方法返回扩展存储区目录（SDCard）
          */

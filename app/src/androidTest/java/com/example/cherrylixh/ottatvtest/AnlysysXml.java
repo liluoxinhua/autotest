@@ -3,13 +3,6 @@ package com.example.cherrylixh.ottatvtest;
 import android.os.Environment;
 import android.util.Log;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,8 +13,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -90,6 +83,69 @@ public class AnlysysXml {
 
         return logInfos;
     }
+   public void xmlToHtml(){
+       ArrayList<String[]> logInfos = new ArrayList<>();
+       try {
+           logInfos = new AnlysysXml().getLogInfo();
+       } catch (SAXException e) {
+           Log.v("loginfo","not end");
+       }
+       for(int i=0;i<logInfos.size();i++) {
+           Log.i("loginfo", logInfos.get(i).toString());
+       }
+       String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+       String filename =path+ "OttAtv" + File.separator + "testResult.html";
+       StringBuilder sb=new StringBuilder();
+       PrintStream printStream=null;
+       int passNum=0,failNum=0;
+       float time=0.0f;
+       for(int i=0;i<logInfos.size();i++){
+           if(logInfos.get(i)[4]=="pass"){
+               passNum++;
+           }else{
+               failNum++;
+           }
+       time+=Float.parseFloat(logInfos.get(i)[3]);
+       }
+       int hh=(int)time/(60*60);
+       int mm=(int)(time-hh*3600)/60;
+       float ss=time-hh*3600-mm*60;
+       try {
+           printStream=new PrintStream(new FileOutputStream(filename));
+       } catch (FileNotFoundException e) {
+           e.printStackTrace();
+       }
+       sb.append("<html>");
+       sb.append("<head>");
+       sb.append("<title>测试报告</title>");
+       sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+       //样式内容
+       sb.append("<style type=\"text/css\">");
+       sb.append(".tablename table th {background:#8FBC8F}");
+       sb.append(".tablename table tr{ background:#FAEBD7;text-align:center}");
+       sb.append("</style></head>");
+       //样式结尾
+       //一个标题
+       sb.append("<h1>测试报告</h1>");
+       //一个文本段落
+       sb.append("<p style=\"font-size:20px\">"+"total "+logInfos.size()+" passing "+passNum+" failing "+failNum+" 通过率"+passNum/logInfos.size()*100+"%,"+"运行时长："+hh+" hours "+mm+" minutes "+ss+" seconds"+"</p>");
+       //主体部分div
+       sb.append("<div class=\"tablename\">");
+       //一个table
+       sb.append("<table width=\"500\"  height=\"100\" border=\"1\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse:collapse;\">");
+       sb.append("<th>ID</th><th>测试项目</th><th>case</th><th>执行时间(秒)</th><th>执行状态</th><th>错误信息</th></tr>");
+       for(int i=0;i<logInfos.size();i++){
+           for(int j=0;j<logInfos.get(i).length;j++){
+               sb.append("<td>"+logInfos.get(i)[j]+"</td>");
+           }
+           sb.append("</tr>");
+       }
+
+       sb.append("</tr></table>");
+       sb.append("</div></body></html>");
+       printStream.println(sb.toString());
+   }
+    /*
     public void xmlToExcel(){
         ArrayList<String[]> logInfos = new ArrayList<>();
         try {
@@ -133,9 +189,8 @@ public class AnlysysXml {
         hearders.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         //设置自动换行
         hearders.setWrapText(true);
-        /*
-        /**错误的文本样式
-        */
+        //错误的文本样式
+
         HSSFCellStyle failStyle=workbook.createCellStyle();
         failStyle.setFillForegroundColor(IndexedColors.RED.index);
        failStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
@@ -151,9 +206,7 @@ public class AnlysysXml {
         //设置自动换行
         failStyle.setWrapText(true);
 
-        /*
-        /**正确的case样式
-         */
+        //正确的case样式
         HSSFCellStyle passStyle=workbook.createCellStyle();
         //设置文本颜色
         passStyle.setFillForegroundColor(IndexedColors.GREEN.index);
@@ -169,10 +222,7 @@ public class AnlysysXml {
         passStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         //设置自动换行
         passStyle.setWrapText(true);
-
-        /*
-        /**设置字体样式
-         */
+        //设置字体样式
         HSSFFont font=workbook.createFont();
         font.setColor(HSSFFont.COLOR_NORMAL);
         font.setFontName("宋体");
@@ -238,4 +288,5 @@ public class AnlysysXml {
             }
         }
     }
+    */
 }

@@ -1,5 +1,4 @@
 package com.example.cherrylixh.ottatvtest.TestCases;
-
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -23,8 +22,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Test_02_ScheduleTest extends BaseCase{
-   // CommonFunction commonFunction=new CommonFunction();
-    Commentation commentation=new Commentation();
+    Commentation commonFunction=new Commentation();
     final String  TAG=this.getClass().getName();
     public ArrayList<ArrayList<String>> getTestSchedule(String eventDate) throws ParseException {
         ArrayList<ArrayList<String>> scheduleInfo=new ArrayList<>();
@@ -36,13 +34,14 @@ public class Test_02_ScheduleTest extends BaseCase{
         }
         return scheduleInfo;
     }
+
     @Test
     public  void  test_ScheduleTest_01() throws ParseException, JSONException, UiObjectNotFoundException {
-        Log.v(TAG, "开始测试全部赛程页");
         String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        Log.v(TAG, "开始测试全部赛程页");
         Boolean eventIsOk = true;
         int errorId = 0;
-       // 从首页点击全部赛程进入赛程页,当焦点不在赛程时需要点击两次
+        // 从首页点击全部赛程进入赛程页,当焦点不在赛程时需要点击两次
         try {
             UiObject2 enterSchedule = pm.getScheduleDataPage().getEnterSchedule();
             if (enterSchedule.isFocused()) {
@@ -53,19 +52,17 @@ public class Test_02_ScheduleTest extends BaseCase{
             }
         } catch (NullPointerException e) {
             Log.i(TAG, "全部赛程按钮没有找到.....");
-            //commonFunction.TakeScreen(methodName);
-            commentation.takeScreenShot(methodName);
             eventIsOk = false;
         }
         sleep(5000);
         //落焦在今天的赛程，向上移动到到第一个赛程
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             mDevice.pressDPadDown();
             sleep(500);
         }
         sleep(1000);
         try {
-     //   for (int n = 0; n < 14; n++) {
+           // for (int n = 0; n < 14; n++) {
                 String eventDate = pm.getScheduleDataPage().getFocusDate();
                 Log.i("eventdate",eventDate);
                 //根据接口查看当天赛事数量
@@ -78,8 +75,7 @@ public class Test_02_ScheduleTest extends BaseCase{
                     try {
                         assertEquals(true, pm.getScheduleDataPage().getNotes().exists());
                     } catch (AssertionError e) {
-                      //  commonFunction.TakeScreen(eventDate);
-                        commentation.takeScreenShot(methodName);
+                        commonFunction.takeScreenShot(eventDate);
                         eventIsOk = false;
                     }
                 } else {
@@ -102,7 +98,7 @@ public class Test_02_ScheduleTest extends BaseCase{
                             actualData.add(focusContent);
                             sleep(500);
                             mDevice.pressDPadDown();
-                            sleep(500);
+                            sleep(1000);
                         }
                         //判断是否是最后一个数据
                         int exceptNum = exceptData.get(exceptData.size() - 1).size();
@@ -110,8 +106,8 @@ public class Test_02_ScheduleTest extends BaseCase{
                         Log.v("exceptdata", exceptData.get(exceptData.size() - 1).toString());
                         Log.v("focusdata", lastFocusContent.toString());
                         actualData.add(lastFocusContent);
-                        sleep(500);
-                       //断言接口和页面两个集合的数量是否相等
+                        sleep(1000);
+                        //断言接口和页面两个集合的数量是否相等
                         Log.i("excepSize", String.valueOf(exceptData.size()));
                         Log.i("actualSize", String.valueOf(actualData.size()));
                         assertEquals(eventDate+"赛程数据不正确",exceptData.size(),actualData.size());
@@ -123,27 +119,23 @@ public class Test_02_ScheduleTest extends BaseCase{
                                 assertEquals("赛程表数据不正确" + eventDate + "第" + j + "行", true,exceptData.contains(actualData.get(j)));
                             } catch (AssertionError e) {
                                 Log.e("赛程表数据不正确", eventDate + "第" + j + "行");
-                              //  commonFunction.TakeScreen(eventDate + "i");
-                                commentation.takeScreenShot(methodName);
+                                commonFunction.takeScreenShot(eventDate + "i");
                                 eventIsOk = false;
                                 errorId++;
                             }
                         }
                     }
                     //  sleep(500);
-
+                    mDevice.pressDPadLeft();
+                    mDevice.pressDPadDown();
                 }
-            mDevice.pressDPadLeft();
-            mDevice.pressDPadDown();
-      //   }
+          //  }
         } catch (ParseException e) {
             Log.i(methodName, "全部赛事赛程页面加载失败...");
-           // commonFunction.TakeScreen(methodName);
-            commentation.takeScreenShot(methodName);
+            commonFunction.takeScreenShot(methodName);
             eventIsOk = false;
-       }
+        }
         assertEquals("全部赛程数据不正确,错误数:" + errorId, true, eventIsOk);
-
     }
 
 }

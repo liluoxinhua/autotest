@@ -4,8 +4,10 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.UiDevice;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Commentation {
@@ -66,5 +68,21 @@ public class Commentation {
             commandLine.add("-f");//如果使用commandLine.add(">");是不会写入文件，使用-f可以写入文件
             commandLine.add(logpath);
         }
+  }
+  public static void cmdExec(String cmdString){
+        Process p;
+      try {
+          p=Runtime.getRuntime().exec(cmdString);
+          StringBuffer contentCmd=new StringBuffer();
+          BufferedReader br=new BufferedReader(new InputStreamReader(p.getInputStream(),"GBK"));
+          String line;
+          while((line=br.readLine())!=null){
+              contentCmd.append(line+"\n");
+          }
+          System.out.println(contentCmd);
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+
   }
 }
